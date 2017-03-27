@@ -27,9 +27,9 @@
             <rect x=0 y=0 v-bind:width="width" v-bind:height="height" stroke="black" fill="white"></rect>
 
             <!-- Display all the components -->
-            <component v-for="item in items"
+            <component v-for="(item, index) in items"
                 v-bind:is="item.type"
-                :key="$index"
+                :key="index"
                 v-bind:item="item"
                 v-on:click.stop="selectItem(item)">
             </component>
