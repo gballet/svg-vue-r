@@ -81,7 +81,6 @@ export default {
 
                 switch (this.tool) {
                     case 'svg-vue-r-square':
-                    case 'svg-vue-r-line':
                         new_item.width = Math.abs(this.dwidth);
                         new_item.height = Math.abs(this.dheight);
                         new_item.x = this.dx + Math.min(this.dwidth, 0);
@@ -90,8 +89,9 @@ export default {
                     case 'svg-vue-r-line':
                         new_item.width = this.dwidth;
                         new_item.height = this.dheight;
-                        new_item.x = this.dx + Math.min(this.dwidth, 0);
-                        new_item.y = this.dy + Math.min(this.dheight, 0);
+                        new_item.x = this.dx;
+                        new_item.y = this.dy;
+                        console.log(new_item);
                         break;
                     case 'svg-vue-r-circle':
                         new_item.x = this.dx;
@@ -135,7 +135,7 @@ export default {
             props: ["item"],
             methods: {
                 select: function() {
-                    
+
                 }
             }
         },
