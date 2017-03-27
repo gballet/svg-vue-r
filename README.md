@@ -16,7 +16,6 @@ TODO
 
 # Features that are coming up
 
-  * Color picker
   * Editing items
   * Adding more shapes & text
 
