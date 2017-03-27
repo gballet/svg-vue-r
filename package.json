@@ -1,0 +1,41 @@
+{
+  "name": "svg-vue-r",
+  "version": "1.0.0",
+  "author": "Guillaume Ballet",
+  "private": true,
+  "description": "A lightweight SVG graph editor built with Vue.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gballet/svg-vue-r.git"
+  },
+  "keywords": [
+    "svg",
+    "vue",
+    "diagram"
+  ],
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/gballet/svg-vue-r/issues"
+  },
+  "homepage": "https://github.com/gballet/svg-vue-r#readme",
+  "dependencies": {
+    "vue": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-loader": "^6.0.0",
+    "babel-preset-latest": "^6.0.0",
+    "cross-env": "^3.0.0",
+    "css-loader": "^0.25.0",
+    "file-loader": "^0.9.0",
+    "vue-loader": "^11.1.4",
+    "vue-template-compiler": "^2.2.1",
+    "webpack": "^2.2.0",
+    "webpack-dev-server": "^2.2.0"
+  }
+}
