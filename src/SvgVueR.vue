@@ -2,6 +2,15 @@
     <div>
         Tool: {{tool}}
         <br>
+        Color: {{bgcolor}}
+        <br>
+        Choose color:
+        <button v-on:click="bgcolor = color" :key="index"
+            v-for="(color, index) in ['blue', 'red', 'green', 'yellow', 'black', 'white']">
+            <div class="colorbutton" :style="'background-color:' + color"></div>
+        </button>
+        <br>
+        Choose tool:
         <!-- TODO make this an iterated list -->
         <button v-on:click.prevent="tool='svg-vue-r-square'">Square</button>
         <button v-on:click.prevent="tool='svg-vue-r-circle'">Circle</button>
@@ -54,7 +63,8 @@ export default {
             dwidth: 0,
             dheight: 0,
             dr: 0,
-            resizing: false
+            resizing: false,
+            bgcolor: "blue"
         }
     },
     methods: {
@@ -76,7 +86,8 @@ export default {
             if (this.drawing) {
                 this.drawing = false;
                  let new_item = {
-                    type: this.tool
+                    type: this.tool,
+                    bgcolor: this.bgcolor
                 };
 
                 switch (this.tool) {
@@ -131,7 +142,7 @@ export default {
     },
     components: {
         "svg-vue-r-square": {
-            template: '<rect v-bind:x="item.x" v-bind:y="item.y" v-bind:width="item.width" v-bind:height="item.height" fill="blue" v-on:click.stop="select"></rect>',
+            template: '<rect v-bind:x="item.x" v-bind:y="item.y" v-bind:width="item.width" v-bind:height="item.height" v-bind:fill="item.bgcolor"></rect>',
             props: ["item"],
             methods: {
                 select: function() {
@@ -151,4 +162,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+    .colorbutton {
+        width: 10px;
+        height: 10px;
+        border: solid 1px black;
+    }
+</style>
