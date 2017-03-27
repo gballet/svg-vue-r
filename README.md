@@ -2,9 +2,20 @@
 
 A lightweight SVG graph editor built with Vue.js
 
+# Running the example
+
+    npm run dev
+
+# Integrating it to your application
+
+TODO
+
+# Running the unit tests
+
+TODO
+
 # Features that are coming up
 
-  * Brunch / webpack integration
   * Color picker
   * Editing items
   * Adding more shapes & text
@@ -12,3 +23,4 @@ A lightweight SVG graph editor built with Vue.js
 # Known bugs
 
   * Resizing the canvas is broken
+  * In general, mouseexit isn't properly handled
