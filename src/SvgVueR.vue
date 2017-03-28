@@ -21,7 +21,9 @@
             v-bind:height="height"
             v-on:mousedown="startDrawing"
             v-on:mousemove="refreshDrawing"
-            v-on:mouseup="endDrawing">
+            v-on:mouseup="endDrawing"
+            @keyup.delete="removeSelected"
+            tabindex="0">
 
             <!-- background -->
             <rect x=0 y=0 v-bind:width="width" v-bind:height="height" fill="white"></rect>
@@ -140,12 +142,11 @@ export default {
         resizeEnd: function(e) {
             this.resizing = false;
         },
+
+        // When clicking on an item, make sure it appears as selected
         selectItem: function(item, index) {
             /* Unselect the previous object */
-            if (this.items.length < 1) {
-                alert("Error: no items available for selection")
-            }
-            this.items.forEach((item) => item.selected = false);
+            this.deselectItem();
 
             /* Bring the object to the fore */
             this.items.splice(index, 1);
@@ -153,6 +154,20 @@ export default {
 
             /* Set halo */
             item.selected = true;
+        },
+
+        /* Make sure that all items are un-selected */
+        deselectItem: function() {
+            this.items.forEach((item) => item.selected = false);
+        },
+
+        // If an item is selected and either `delete` or `backspace` is pressed,
+        // this function will delete it.
+        removeSelected: function() {
+            let selected_index = this.items.findIndex((item) => item.selected);
+
+            if (selected_index >= 0)
+                this.items.splice(selected_index, 1);
         }
     },
     components: {
