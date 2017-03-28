@@ -11,12 +11,9 @@
         </button>
         <br>
         Choose tool:
-        <!-- TODO make this an iterated list -->
-        <button v-on:click.prevent="tool='svg-vue-r-square'">Square</button>
-        <button v-on:click.prevent="tool='svg-vue-r-circle'">Circle</button>
-        <button v-on:click.prevent="tool='svg-vue-r-line'">Line</button>
-        <button v-on:click.prevent="tool='select'">Select</button>
-        <button v-on:click.prevent="tool='svg-vue-r-text'">Text</button>
+        <button @click.prevent="setTool(_tool)" v-for="(_tool, index) in tools" :key="index">
+            <span :class="tool == _tool ? 'active-tool' : 'inactive-tool'">{{capitalize(_tool.split("-")[3])}}</span>
+        </button>
         <svg v-bind:width="width"
             v-bind:height="height"
             v-on:mousedown="startDrawing"
@@ -55,6 +52,8 @@
 </template>
 
 <script>
+const systemTools = ["svg-vue-r-square", "svg-vue-r-circle", "svg-vue-r-line", "svg-vue-r-select", "svg-vue-r-text"]
+
 export default {
     data: () => {
         return {
@@ -69,7 +68,8 @@ export default {
             dheight: 0,
             dr: 0,
             resizing: false,
-            bgcolor: "blue"
+            bgcolor: "blue",
+            tools: systemTools
         }
     },
     methods: {
@@ -115,7 +115,7 @@ export default {
                         new_item.y = this.dy;
                         new_item.r = Math.sqrt(this.dwidth * this.dwidth + this.dheight * this.dheight);
                         break;
-                    case 'select':
+                    case 'svg-vue-r-select':
                         break;
                     default:
                         alert("This isn't implemented");
@@ -161,6 +161,15 @@ export default {
             this.items.forEach((item) => item.selected = false);
         },
 
+        /* Change the tool that is currently active */
+        setTool: function(tool) {
+            // In case an item is selected, un-select it to avoid key binding
+            // conflicts.
+            this.deselectItem();
+
+            this.tool = tool;
+        },
+
         // Set either the color of the currently selected item, or the default
         // color for the next items to be created.
         setColor: function(color) {
@@ -176,7 +185,9 @@ export default {
 
             if (selected_index >= 0)
                 this.items.splice(selected_index, 1);
-        }
+        },
+
+        capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1)
     },
     components: {
         "svg-vue-r-square": {
@@ -278,5 +289,13 @@ export default {
         width: 10px;
         height: 10px;
         border: solid 1px black;
+    }
+
+    .active-tool {
+        font-weight: bold;
+    }
+
+    .inactive-tool {
+
     }
 </style>
