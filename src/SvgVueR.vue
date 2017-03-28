@@ -24,7 +24,7 @@
             v-on:mouseup="endDrawing">
 
             <!-- background -->
-            <rect x=0 y=0 v-bind:width="width" v-bind:height="height" stroke="black" fill="white"></rect>
+            <rect x=0 y=0 v-bind:width="width" v-bind:height="height" fill="white"></rect>
 
             <!-- Display all the components -->
             <component v-for="(item, index) in items"
@@ -38,6 +38,9 @@
             <rect v-bind:x="dx + Math.min(0, dwidth)" v-bind:y="dy + Math.min(0, dheight)" v-bind:width="Math.abs(dwidth)" v-bind:height="Math.abs(dheight)" v-if="tool == 'svg-vue-r-square'"></rect>
             <circle v-bind:cx="dx" v-bind:cy="dy" v-bind:r="dr" v-if="tool == 'svg-vue-r-circle'" fill="black"></circle>
             <line v-bind:x1="dx" v-bind:y1="dy" v-bind:x2="dx+dwidth" v-bind:y2="dy+dheight" stroke="black" v-if="tool == 'svg-vue-r-line'"></line>
+
+            <!-- The frame, has to be drawn after to be above objects that extend beyond boundaries -->
+            <rect x=0 y=0 v-bind:width="width" v-bind:height="height" stroke="black" fill="none"></rect>
 
             <!-- resizing indicator -->
             <rect v-bind:x="width-10" v-bind:y="height-10"
