@@ -18,6 +18,7 @@
             v-on:mousemove="refreshDrawing"
             v-on:mouseup="endDrawing"
             @keyup.delete="removeSelected"
+            @keyup.esc="deselectItem"
             tabindex="0">
 
             <!-- background -->
