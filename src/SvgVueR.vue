@@ -1,7 +1,5 @@
 <template>
     <div>
-        Tool: {{tool}}
-        <br>
         Color: {{bgcolor}}
         <br>
         Choose color:
