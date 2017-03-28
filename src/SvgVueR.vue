@@ -5,7 +5,7 @@
         Color: {{bgcolor}}
         <br>
         Choose color:
-        <button v-on:click="bgcolor = color" :key="index"
+        <button v-on:click="setColor(color)" :key="index"
             v-for="(color, index) in ['blue', 'red', 'green', 'yellow', 'black', 'white']">
             <div class="colorbutton" :style="'background-color:' + color"></div>
         </button>
@@ -159,6 +159,14 @@ export default {
         /* Make sure that all items are un-selected */
         deselectItem: function() {
             this.items.forEach((item) => item.selected = false);
+        },
+
+        // Set either the color of the currently selected item, or the default
+        // color for the next items to be created.
+        setColor: function(color) {
+            this.bgcolor = color;
+
+            this.items.forEach((item) => { if (item.selected) item.bgcolor = color; });
         },
 
         // If an item is selected and either `delete` or `backspace` is pressed,
