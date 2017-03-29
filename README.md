@@ -21,5 +21,4 @@ TODO
 
 # Known bugs
 
-  * Resizing the canvas is broken
   * In general, mouseexit isn't properly handled

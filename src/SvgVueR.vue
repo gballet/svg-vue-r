@@ -45,7 +45,8 @@
                 width="10" height="10"
                 v-on:mousedown.stop="resizeStart"
                 v-on:mousemove.stop="resize"
-                v-on:mouseup.stop="resizeEnd"></rect>
+                v-on:mouseup.stop="resizeEnd"
+                @mouseleave="resizeEnd"></rect>
         </svg>
     </div>
 </template>
