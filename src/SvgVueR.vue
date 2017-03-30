@@ -1,17 +1,11 @@
 <template>
     <div>
-        Color: {{bgcolor}}
-        <br>
         Choose color:
         <button v-on:click="setColor(color)" :key="index"
             v-for="(color, index) in ['blue', 'red', 'green', 'yellow', 'black', 'white']">
-            <div class="colorbutton" :style="'background-color:' + color"></div>
+            <div :class="`colorbutton${bgcolor == color ? ' current-color' : ''}`" :style="'background-color:' + color"></div>
         </button>
         <br>
-        Choose tool:
-        <button @click.prevent="setTool(_tool)" v-for="(_tool, index) in tools" :key="index">
-            <span :class="tool == _tool ? 'active-tool' : 'inactive-tool'">{{capitalize(_tool.split("-")[3])}}</span>
-        </button>
         <svg v-bind:width="width"
             v-bind:height="height"
             v-on:mousedown="startDrawing"
@@ -48,6 +42,11 @@
                 v-on:mouseup.stop="resizeEnd"
                 @mouseleave="resizeEnd"></rect>
         </svg>
+        <br>
+        Choose tool:
+        <button @click.prevent="setTool(_tool)" v-for="(_tool, index) in tools" :key="index">
+            <span :class="tool == _tool ? 'active-tool' : 'inactive-tool'">{{capitalize(_tool.split("-")[3])}}</span>
+        </button>
     </div>
 </template>
 
@@ -297,5 +296,9 @@ export default {
 
     .inactive-tool {
 
+    }
+
+    .current-color {
+        border: solid 3px black;
     }
 </style>
