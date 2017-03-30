@@ -6,6 +6,10 @@
             <div :class="`colorbutton${bgcolor == color ? ' current-color' : ''}`" :style="'background-color:' + color"></div>
         </button>
         <br>
+        <text-editor v-if="editingItem >= 0"
+            @hide="editingItem=-1"
+            v-model="items[editingItem]">
+        </text-editor>
         <svg v-bind:width="width"
             v-bind:height="height"
             v-on:mousedown="startDrawing"
@@ -53,6 +57,8 @@
 <script>
 const systemTools = ["svg-vue-r-square", "svg-vue-r-circle", "svg-vue-r-line", "svg-vue-r-select", "svg-vue-r-text"]
 
+import TextEditor from './TextEditor.vue';
+
 export default {
     data: () => {
         return {
@@ -68,7 +74,8 @@ export default {
             dr: 0,
             resizing: false,
             bgcolor: "blue",
-            tools: systemTools
+            tools: systemTools,
+            editingItem: -1
         }
     },
     methods: {
@@ -115,6 +122,12 @@ export default {
                         new_item.r = Math.sqrt(this.dwidth * this.dwidth + this.dheight * this.dheight);
                         break;
                     case 'svg-vue-r-select':
+                        break;
+                    case 'svg-vue-r-text':
+                        this.editingItem = this.items.length;
+                        new_item.text = "Please enter the text";
+                        new_item.x = this.dx;
+                        new_item.y = this.dy;
                         break;
                     default:
                         alert("This isn't implemented");
@@ -189,6 +202,7 @@ export default {
         capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1)
     },
     components: {
+        "text-editor": TextEditor,
         "svg-vue-r-square": {
             template: `
             <rect v-bind:x="item.x" v-bind:y="item.y" v-bind:width="item.width"
@@ -278,6 +292,10 @@ export default {
                     this.$emit("select")
                 }
             }
+        },
+        'svg-vue-r-text': {
+            template: `<text :x="item.x" :y="item.y">{{item.text}}</text>`,
+            props: ["item"],
         }
     }
 }
