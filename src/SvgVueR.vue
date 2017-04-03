@@ -60,6 +60,7 @@ const systemTools = ["svg-vue-r-square", "svg-vue-r-circle", "svg-vue-r-line", "
 import TextEditor from './TextEditor.vue';
 
 export default {
+    name: "svg-vue-r",
     data: () => {
         return {
             tool: 'svg-vue-r-square',
