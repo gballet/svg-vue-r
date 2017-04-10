@@ -34,6 +34,12 @@ module.exports = function(config) {
       require("karma-phantomjs-launcher")
     ],
 
-    browsers: ["PhantomJS"]
+    browsers: ["PhantomJS"],
+
+    browserConsoleLogOptions: {
+      level: 'log',
+      format: '%b %T: %m',
+      terminal: true
+    }
   });
 };
