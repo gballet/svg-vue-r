@@ -1,19 +1,30 @@
 import Vue from 'vue';
 import TextEditor from '../src/TextEditor.vue';
-import expect from 'expect';
+import expect, {spyOn} from 'expect';
 
 describe("<text-editor>", (done) => {
 	beforeEach(() => {
 		this.vm = new Vue({
-			data: { hi: { text: "hi" } },
-			template: '<div><text-editor ref="texteditor" v-model="hi"></text-editor></div>',
-			components: { 'text-editor': TextEditor }
+			data: { hi: { text: "hi" }, hidecalled: false },
+			template: '<div><text-editor ref="texteditor" v-model="hi" @hide="hide"></text-editor></div>',
+			components: { 'text-editor': TextEditor },
+			methods: {
+				hide: function() {
+					// Spys don't work across nextTick so we have to be a bit
+					// creative.
+					this.hidecalled = true;
+				}
+			}
 		}).$mount();
 	});
 
 	afterEach(() => {
 		delete this.vm;
-	})
+	});
+
+	it("should have an input field", () => {
+		expect(this.vm.$el.querySelector("input")).toNotBe(null);
+	});
 
 	it("should have the v-model value as input", () => {
 		expect(this.vm.$el.querySelector("input").value).toBe(this.vm.hi.text);
@@ -74,6 +85,34 @@ describe("<text-editor>", (done) => {
 			expect(this.vm.$data.hi.text).toEqual(initialValue);
 			expect(this.vm.$refs.texteditor.value.text).toEqual(initialValue);
 
+			done();
+		});
+	});
+
+	it("should call the 'hide' callback when clicking on cancel", (done) => {
+		var hideSpy = spyOn(this.vm, 'hide');
+
+		expect(this.vm.hidecalled).toBe(false);
+
+		// "click" on cancel
+		this.vm.$refs.texteditor.cancel();
+
+		Vue.nextTick(() => {
+			expect(this.vm.hidecalled).toBe(true);
+			done();
+		});
+	});
+
+	it("should call the 'hide' callback when clicking on save", (done) => {
+		var hideSpy = spyOn(this.vm, 'hide');
+
+		expect(this.vm.hidecalled).toBe(false);
+
+		// "click" on save
+		this.vm.$refs.texteditor.save();
+
+		Vue.nextTick(() => {
+			expect(this.vm.hidecalled).toBe(true);
 			done();
 		});
 	});
