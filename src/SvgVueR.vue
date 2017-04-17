@@ -58,6 +58,9 @@
 const systemTools = ["svg-vue-r-square", "svg-vue-r-circle", "svg-vue-r-line", "svg-vue-r-select", "svg-vue-r-text"]
 
 import TextEditor from './TextEditor.vue';
+import SvgVueRSquare from './SvgVueRSquare.vue';
+import SvgVueRCircle from './SvgVueRCircle.vue';
+import SvgVueRLine from './SvgVueRLine.vue';
 
 export default {
     name: "svg-vue-r",
@@ -204,96 +207,9 @@ export default {
     },
     components: {
         "text-editor": TextEditor,
-        "svg-vue-r-square": {
-            template: `
-            <rect v-bind:x="item.x" v-bind:y="item.y" v-bind:width="item.width"
-                v-bind:height="item.height" v-bind:fill="item.bgcolor"
-                v-bind:stroke="stroke" v-bind:stroke-width="strokewidth"
-                v-on:click.stop="select">
-            </rect>
-            `,
-            props: ["item"],
-            computed: {
-                stroke: function() {
-                    console.log(this.item)
-                    if (this.item.selected)
-                        return 'black';
-                    else
-                        return this.item.fgcolor || 'black';
-                },
-                strokewidth: function() {
-                    console.log(this.item.selected)
-                    if (this.item.selected)
-                        return '3px';
-                    else
-                        return '1px';
-                }
-            },
-            methods: {
-                select: function() {
-                    this.$emit("select")
-                }
-            }
-        },
-        "svg-vue-r-circle": {
-            template: `
-            <circle v-bind:cx="item.x" v-bind:cy="item.y" v-bind:r="item.r"
-                v-bind:fill="item.bgcolor" v-bind:stroke="stroke"
-                v-bind:stroke-width="strokewidth" v-on:click.stop="select">
-            </circle>`,
-            props: ["item"],
-            computed: {
-                stroke: function() {
-                    console.log(this.item)
-                    if (this.item.selected)
-                        return 'black';
-                    else
-                        return this.item.fgcolor || 'black';
-                },
-                strokewidth: function() {
-                    console.log(this.item.selected)
-                    if (this.item.selected)
-                        return '3px';
-                    else
-                        return '1px';
-                }
-            },
-            methods: {
-                select: function() {
-                    this.$emit("select")
-                }
-            }
-        },
-        "svg-vue-r-line": {
-            template: `
-            <line :x1="item.x" :y1="item.y" :x2="item.x+item.width"
-                :y2="item.y+item.height" :stroke-width="strokewidth"
-                :stroke="stroke" v-on:click.stop="select">
-            </line>
-            `,
-            props: ["item"],
-            computed: {
-                stroke: function() {
-                    console.log(this.item)
-                    if (this.item.selected)
-                        return 'black';
-                    else
-                        return this.item.fgcolor || 'black';
-                },
-                strokewidth: function() {
-                    console.log(this.item.selected)
-                    if (this.item.selected)
-                        return '3px';
-                    else
-                        return '1px';
-                }
-            },
-            methods: {
-                select: function() {
-                    this.$emit("select")
-                }
-            }
-        },
+        "svg-vue-r-square": SvgVueRSquare,
+        "svg-vue-r-circle": SvgVueRCircle,
+        "svg-vue-r-line": SvgVueRLine,
         'svg-vue-r-text': {
             template: `<text :x="item.x" :y="item.y">{{item.text}}</text>`,
             props: ["item"],
