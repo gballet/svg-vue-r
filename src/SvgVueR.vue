@@ -24,10 +24,11 @@
 
             <!-- Display all the components -->
             <component v-for="(item, index) in items"
-                v-bind:is="item.type"
+                :is="item.type"
                 :key="index"
-                v-bind:item="item"
-                v-on:select="selectItem(item, index)">
+                :item="item"
+                @item="moveItem"
+                @select="selectItem(item, index)">
             </component>
 
             <!-- Visual feedback when drawing, for each primitive -->
@@ -203,7 +204,18 @@ export default {
                 this.items.splice(selected_index, 1);
         },
 
-        capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1)
+        capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1),
+
+        // This is called when the user is done dragging an element. It will move
+        // the item by the deltas passed as parameters.
+        moveItem: function(diffX, diffY) {
+            let selected_index = this.items.findIndex((item) => item.selected);
+
+            if (selected_index >= 0) {
+                this.items[selected_index].x += diffX;
+                this.items[selected_index].y += diffY;
+            }
+        }
     },
     components: {
         "text-editor": TextEditor,
