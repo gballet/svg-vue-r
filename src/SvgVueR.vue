@@ -27,7 +27,7 @@
                 :is="item.type"
                 :key="index"
                 :item="item"
-                @item="moveItem"
+                @item="(diffx, diffy) => moveItem(index, diffx, diffy)"
                 @select="selectItem(item, index)">
             </component>
 
@@ -207,13 +207,12 @@ export default {
         capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1),
 
         // This is called when the user is done dragging an element. It will move
-        // the item by the deltas passed as parameters.
-        moveItem: function(diffX, diffY) {
-            let selected_index = this.items.findIndex((item) => item.selected);
-
-            if (selected_index >= 0) {
-                this.items[selected_index].x += diffX;
-                this.items[selected_index].y += diffY;
+        // the item by the deltas passed as parameters. The index is also pased
+        // as the user must be able to drag objects that they didn't select.
+        moveItem: function(index, diffX, diffY) {
+            if (index >= 0) {
+                this.items[index].x += diffX;
+                this.items[index].y += diffY;
             }
         }
     },

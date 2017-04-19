@@ -11,13 +11,14 @@ export default {
     data: () => {
         return {
             dragging: false,
-            initDragX: null,
+            initDragX: null,    // drag start point, set with mousedown
             initDragY: null,
-            currentDragX: 0,
+            currentDragX: 0,    // current drag offsets, updated with mousemove
             currentDragY: 0
         }
     },
-    props: ["item"],
+    props: ["item"],            // can't use v-model because it's called from a
+                                // v-for loop.
     computed: {
         stroke: function() {
             if (this.item.selected)
