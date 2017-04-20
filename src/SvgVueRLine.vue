@@ -1,12 +1,23 @@
 <template>
-    <line :x1="item.x" :y1="item.y" :x2="item.x+item.width"
-        :y2="item.y+item.height" :stroke-width="strokewidth"
-        :stroke="stroke" v-on:click.stop="select">
+    <line :x1="item.x+currentDragX" :y1="item.y+currentDragY"
+        :x2="item.x+item.width+currentDragX" :y2="item.y+item.height+currentDragY"
+        :stroke-width="strokewidth" :stroke="stroke"
+        @mousedown.stop="moveStart" @mousemove.stop="move"
+        @mouseup.stop="moveEnd" @mouseleave.stop="moveEnd">
     </line>
 </template>
 
 <script>
 export default {
+    data: () => {
+        return {
+            dragging: false,
+            initDragX: null,    // drag start point, set with mousedown
+            initDragY: null,
+            currentDragX: 0,    // current drag offsets, updated with mousemove
+            currentDragY: 0
+        }
+    },
     props: ["item"],
     computed: {
         stroke: function() {
@@ -25,8 +36,38 @@ export default {
         }
     },
     methods: {
-        select: function() {
-            this.$emit("select")
+        move: function(e) {
+            if (this.initDragX) {
+                if (Math.abs(e.offsetX-this.initDragX) + Math.abs(e.offsetY-this.initDragY) > 5)
+                    // Quick opt: make sure that it's not already dragging
+                    this.dragging = true;
+
+                if (this.dragging) {
+                    this.currentDragX = e.offsetX - this.initDragX;
+                    this.currentDragY = e.offsetY - this.initDragY;
+                }
+            }
+        },
+        moveStart: function(e) {
+            this.initDragX = e.offsetX;
+            this.initDragY = e.offsetY;
+        },
+        moveEnd: function(e) {
+            if (this.initDragX) {
+                if (!this.dragging)
+                    this.$emit("select");
+                else {
+                    this.dragging = false;
+                    this.currentDragX = 0;
+                    this.currentDragY = 0;
+                    let diffX = e.offsetX - this.initDragX;
+                    let diffY = e.offsetY - this.initDragY;
+                    this.$emit('item', diffX, diffY);
+                }
+
+                this.initDragX = null;
+                this.initDragY = null;
+            }
         }
     }
 }
