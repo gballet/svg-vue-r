@@ -139,7 +139,8 @@ export default {
                         break;
                 }
 
-                this.items.push(new_item);
+                if (this.tool != "svg-vue-r-select")
+                    this.items.push(new_item);
                 this.dx = this.dy = this.dheight = this.dwidth = this.dr = 0;
             }
         },
