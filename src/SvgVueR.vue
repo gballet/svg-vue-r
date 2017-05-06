@@ -17,7 +17,7 @@
             v-on:mouseup="endDrawing"
             @keyup.delete="removeSelected"
             @keyup.esc="deselectItem"
-            tabindex="0">
+            tabindex="0" ondragstart="return false;">
 
             <!-- background -->
             <rect x=0 y=0 v-bind:width="width" v-bind:height="height" fill="white"></rect>
