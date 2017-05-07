@@ -159,19 +159,29 @@ export default {
 
         // When clicking on an item, make sure it appears as selected
         selectItem: function(item, index) {
-            /* Unselect the previous object */
-            this.deselectItem();
+            if (this.tool == 'svg-vue-r-select') {
+                /* Unselect the previous object */
+                this.deselectItem();
 
-            /* Bring the object to the fore */
-            this.items.splice(index, 1);
-            this.items.push(item);
+                /* Bring the object to the fore */
+                this.items.splice(index, 1);
+                this.items.push(item);
 
-            /* Set halo */
-            item.selected = true;
+                /* Set halo */
+                item.selected = true;
+
+                /* If text, set editing mode */
+                if (item.type == "svg-vue-r-text")
+                    this.editingItem = this.items.length-1;
+            }
         },
 
         /* Make sure that all items are un-selected */
         deselectItem: function() {
+            // NOTE at the moment, the selectd item is always the
+            // last one. Howerver, in the future there might be more
+            // than one selected item (for grouping) so let's take the
+            // safer, longer approach.
             this.items.forEach((item) => item.selected = false);
         },
 
@@ -195,10 +205,12 @@ export default {
         // If an item is selected and either `delete` or `backspace` is pressed,
         // this function will delete it.
         removeSelected: function() {
-            let selected_index = this.items.findIndex((item) => item.selected);
-
-            if (selected_index >= 0)
-                this.items.splice(selected_index, 1);
+            // NOTE at the moment only one item is selected, and it's the
+            // last one. In the future, go over all selected items and remove
+            // each one of them.
+            if (this.items[this.items.length-1].selected) {
+                this.items.splice(this.items.length-1, 1);
+            }
         },
 
         capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1),
@@ -219,8 +231,25 @@ export default {
         "svg-vue-r-circle": SvgVueRCircle,
         "svg-vue-r-line": SvgVueRLine,
         'svg-vue-r-text': {
-            template: `<text :x="item.x" :y="item.y">{{item.text}}</text>`,
+            name: "svg-vue-r-text",
+            template: `
+                <g @click="editItem">
+                    <text ref="content" :x="item.x" :y="item.y">{{item.text}}</text>
+                    <rect :x="item.x" :y="item.y-textHeight" :width="textWidth" :height="textHeight" v-if="item.selected" stroke="black" fill="rgba(0,0,0,0)"></rect>
+                </g>
+            `,
             props: ["item"],
+            data() {
+                return {
+                    textWidth: 0,
+                    textHeight: 0
+                }
+            },
+            methods: {
+                editItem() {
+                    this.$emit('select');
+                }
+            }
         }
     }
 }
