@@ -10,17 +10,16 @@
             @hide="editingItem=-1"
             v-model="items[editingItem]">
         </text-editor>
-        <svg v-bind:width="width"
-            v-bind:height="height"
-            v-on:mousedown="startDrawing"
-            v-on:mousemove="refreshDrawing"
-            v-on:mouseup="endDrawing"
+        <svg :width="width" :height="height"
+            @mousedown="startDrawing"
+            @mousemove="refreshDrawing"
+            @mouseup="endDrawing"
             @keyup.delete="removeSelected"
             @keyup.esc="deselectItem"
             tabindex="0" ondragstart="return false;">
 
             <!-- background -->
-            <rect x=0 y=0 v-bind:width="width" v-bind:height="height" fill="white"></rect>
+            <rect x=0 y=0 :width="width" :height="height" fill="white"></rect>
 
             <!-- Display all the components -->
             <component v-for="(item, index) in items"
