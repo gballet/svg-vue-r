@@ -59,6 +59,7 @@ import TextEditor from './TextEditor.vue';
 import SvgVueRSquare from './SvgVueRSquare.vue';
 import SvgVueRCircle from './SvgVueRCircle.vue';
 import SvgVueRLine from './SvgVueRLine.vue';
+import SvgVueRText from './SvgVueRText.vue';
 
 export default {
     name: "svg-vue-r",
@@ -173,6 +174,8 @@ export default {
                 /* If text, set editing mode */
                 if (item.type == "svg-vue-r-text")
                     this.editingItem = this.items.length-1;
+                else
+                    this.editingItem = -1;
             }
         },
 
@@ -210,6 +213,7 @@ export default {
             // each one of them.
             if (this.items[this.items.length-1].selected) {
                 this.items.splice(this.items.length-1, 1);
+                this.editingItem = -1;
             }
         },
 
@@ -230,28 +234,8 @@ export default {
         "svg-vue-r-square": SvgVueRSquare,
         "svg-vue-r-circle": SvgVueRCircle,
         "svg-vue-r-line": SvgVueRLine,
-        'svg-vue-r-text': {
-            name: "svg-vue-r-text",
-            template: `
-                <g @click="editItem">
-                    <text ref="content" :x="item.x" :y="item.y">{{item.text}}</text>
-                    <rect :x="item.x" :y="item.y-textHeight" :width="textWidth" :height="textHeight" v-if="item.selected" stroke="black" fill="rgba(0,0,0,0)"></rect>
-                </g>
-            `,
-            props: ["item"],
-            data() {
-                return {
-                    textWidth: 0,
-                    textHeight: 0
-                }
-            },
-            methods: {
-                editItem() {
-                    this.$emit('select');
-                }
-            }
-        }
-    }
+        'svg-vue-r-text': SvgVueRText
+    },
 }
 </script>
 
