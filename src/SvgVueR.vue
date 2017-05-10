@@ -124,6 +124,7 @@ export default {
                         new_item.r = Math.sqrt(this.dwidth * this.dwidth + this.dheight * this.dheight);
                         break;
                     case 'svg-vue-r-select':
+                        this.deselectItem();
                         break;
                     case 'svg-vue-r-text':
                         this.editingItem = this.items.length;
