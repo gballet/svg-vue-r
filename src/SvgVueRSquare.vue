@@ -1,7 +1,7 @@
 <template>
     <rect :x="item.x+currentDragX" :y="item.y+currentDragY" :width="item.width" :height="item.height"
         :fill="item.bgcolor" :stroke="stroke" :stroke-width="strokewidth"
-        @mousedown.stop="moveStart" @mousemove.stop="move"
+        @mousedown.stop="moveStart" @mousemove="move"
         @mouseup.stop="moveEnd" @mouseleave.stop="moveEnd">
     </rect>
 </template>
