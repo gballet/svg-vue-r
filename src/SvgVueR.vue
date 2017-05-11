@@ -131,6 +131,7 @@ export default {
                         new_item.text = "Please enter the text";
                         new_item.x = this.dx;
                         new_item.y = this.dy;
+                        new_item.size = 12;
                         break;
                     default:
                         alert("This isn't implemented");

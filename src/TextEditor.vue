@@ -2,6 +2,7 @@
     <div>
         Input text:
         <input v-model="value.text" />
+        <input v-model.number="value.size" type="number" min="1" />
         <button @click="save">Save</button>
         <button @click="cancel">Cancel</button>
     </div>
@@ -12,7 +13,8 @@ export default {
     props: ["value"],
     data: function() {
         return {
-            text: this.value.text
+            text: this.value.text,
+            size: this.value.size
         }
     },
     methods: {
@@ -20,8 +22,9 @@ export default {
             this.$emit('hide')
         },
         cancel: function() {
-            this.value.text = this.text
-            this.$emit('hide')
+            this.value.text = this.text;
+            this.value.size = this.size;
+            this.$emit('hide');
         }
     }
 };

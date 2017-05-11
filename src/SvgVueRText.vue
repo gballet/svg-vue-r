@@ -1,6 +1,9 @@
 <template>
     <g @click="editItem">
-        <text ref="content" :x="item.x" :y="item.y">{{item.text}}</text>
+        <text ref="content" :x="item.x" :y="item.y"
+            :font-size="item.size" :fill="item.bgcolor">
+            {{item.text}}
+        </text>
         <rect :x="item.x" :y="item.y-textHeight" :width="textWidth" :height="textHeight" v-if="item.selected" stroke="black" fill="rgba(0,0,0,0)"></rect>
     </g>
 </template>
@@ -31,6 +34,12 @@ export default {
     watch: {
         // Dimensions need to be updated based on text changes.
         'item.text'() {
+            // XXX this is the *old* value, so depending on the difference
+            // in length from before and after, an adjustment will be needed.
+            this.textWidth = this.$refs.content.clientWidth;
+            this.textHeight = this.$refs.content.clientHeight;
+        },
+        'item.size'() {
             // XXX this is the *old* value, so depending on the difference
             // in length from before and after, an adjustment will be needed.
             this.textWidth = this.$refs.content.clientWidth;
