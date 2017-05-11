@@ -125,6 +125,7 @@ export default {
                         break;
                     case 'svg-vue-r-select':
                         this.deselectItem();
+                        this.editingItem = -1;
                         break;
                     case 'svg-vue-r-text':
                         this.editingItem = this.items.length;
