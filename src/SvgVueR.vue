@@ -44,16 +44,22 @@
                 @mouseup.stop="resizeEnd" @mouseleave="resizeEnd">
             </rect>
         </svg>
-        <br>
-        Choose tool:
-        <button @click.prevent="setTool(_tool)" v-for="(_tool, index) in tools" :key="index">
-            <span :class="tool == _tool ? 'active-tool' : 'inactive-tool'">{{capitalize(_tool.split("-")[3])}}</span>
-        </button>
+        <div>
+            <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'active-tool' : 'inactive-tool'">
+                <span :class="['fa', `fa-${_tool.icon}`]"></span>
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
-const systemTools = ["svg-vue-r-square", "svg-vue-r-circle", "svg-vue-r-line", "svg-vue-r-select", "svg-vue-r-text"]
+const systemTools = [
+    { name: "svg-vue-r-square", icon: "square-o" },
+    { name: "svg-vue-r-circle", icon: "circle-thin" },
+    { name: "svg-vue-r-line", icon: "window-minimize" },
+    { name: "svg-vue-r-select", icon: "mouse-pointer" },
+    { name: "svg-vue-r-text", icon: "font" }
+];
 
 import TextEditor from './TextEditor.vue';
 import SvgVueRSquare from './SvgVueRSquare.vue';
@@ -250,11 +256,22 @@ export default {
     }
 
     .active-tool {
-        font-weight: bold;
+        background-color: #aaa;
+        border: none;
+        padding: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
     }
 
     .inactive-tool {
-
+        border: none;
+        padding: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
     }
 
     .current-color {
