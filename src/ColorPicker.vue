@@ -23,6 +23,7 @@ export default {
         selectColor(color) {
             this.value = color;
             this.showList = false;
+            this.$emit('input', color);
         }
     }
 };
@@ -30,7 +31,8 @@ export default {
 
 <style>
 .color-picker {
-    background-color: #aaa;
-    min-height: 32px;
+    background-color: #ccc;
+    min-height: 100%;
+    padding: 5px;
 }
 </style>

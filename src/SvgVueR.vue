@@ -1,11 +1,5 @@
 <template>
     <div>
-        Choose color:
-        <button v-on:click="setColor(color)" :key="index"
-            v-for="(color, index) in ['blue', 'red', 'green', 'yellow', 'black', 'white']">
-            <div :class="`colorbutton${bgcolor == color ? ' current-color' : ''}`" :style="'background-color:' + color"></div>
-        </button>
-        <br>
         <text-editor v-if="editingItem >= 0"
             @hide="editingItem=-1"
             v-model="items[editingItem]">
@@ -48,6 +42,7 @@
             <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'active-tool' : 'inactive-tool'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
             </button>
+            <color-picker v-model="bgcolor"></color-picker>
         </div>
     </div>
 </template>
@@ -62,6 +57,7 @@ const systemTools = [
 ];
 
 import TextEditor from './TextEditor.vue';
+import ColorPicker from './ColorPicker.vue';
 import SvgVueRSquare from './SvgVueRSquare.vue';
 import SvgVueRCircle from './SvgVueRCircle.vue';
 import SvgVueRLine from './SvgVueRLine.vue';
@@ -85,6 +81,13 @@ export default {
             bgcolor: "blue",
             tools: systemTools,
             editingItem: -1
+        }
+    },
+    watch: {
+        bgcolor() {
+            if (this.items.length > 0 && this.items[this.items.length-1].selected) {
+                this.items[this.items.length-1].bgcolor = this.bgcolor;
+            }
         }
     },
     methods: {
@@ -240,6 +243,7 @@ export default {
     },
     components: {
         "text-editor": TextEditor,
+        'color-picker': ColorPicker,
         "svg-vue-r-square": SvgVueRSquare,
         "svg-vue-r-circle": SvgVueRCircle,
         "svg-vue-r-line": SvgVueRLine,
