@@ -21,7 +21,6 @@ export default {
     props: ["value"],
     methods: {
         selectColor(color) {
-            this.value = color;
             this.showList = false;
             this.$emit('input', color);
         }
