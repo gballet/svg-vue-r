@@ -84,6 +84,8 @@ export default {
         }
     },
     watch: {
+        // Watch the background color so that if a shape is selected while
+        // picking a different color, its color will be changed.
         bgcolor() {
             if (this.items.length > 0 && this.items[this.items.length-1].selected) {
                 this.items[this.items.length-1].bgcolor = this.bgcolor;
