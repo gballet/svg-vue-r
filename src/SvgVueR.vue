@@ -65,7 +65,7 @@ import SvgVueRText from './SvgVueRText.vue';
 
 export default {
     name: "svg-vue-r",
-    data: () => {
+    data() {
         return {
             tool: 'svg-vue-r-square',
             items: [],
@@ -93,21 +93,21 @@ export default {
         }
     },
     methods: {
-        startDrawing: function(e) {
+        startDrawing(e) {
             this.dx = e.offsetX;
             this.dy = e.offsetY;
             this.dwidth = 0;
             this.dheight = 0;
             this.drawing = true;
         },
-        refreshDrawing: function(e) {
+        refreshDrawing(e) {
             if (this.drawing) {
                 this.dwidth = e.offsetX - this.dx;
                 this.dheight = e.offsetY - this.dy;
                 this.dr = Math.sqrt(this.dwidth * this.dwidth + this.dheight * this.dheight);
             }
         },
-        endDrawing: function(e) {
+        endDrawing(e) {
             if (this.drawing) {
                 this.drawing = false;
                  let new_item = {
@@ -155,25 +155,25 @@ export default {
                 this.dx = this.dy = this.dheight = this.dwidth = this.dr = 0;
             }
         },
-        resize: function(e) {
+        resize(e) {
             if (this.resizing) {
                 this.width = Math.max(e.pageX - this.resize_init_x + this.resize_init_width, 10);
                 this.height = Math.max(e.pageY - this.resize_init_y + this.resize_init_height, 10);
             }
         },
-        resizeStart: function(e) {
+        resizeStart(e) {
             this.resizing = true;
             this.resize_init_x = e.pageX;
             this.resize_init_y = e.pageY;
             this.resize_init_width = this.width;
             this.resize_init_height = this.height;
         },
-        resizeEnd: function(e) {
+        resizeEnd(e) {
             this.resizing = false;
         },
 
         // When clicking on an item, make sure it appears as selected
-        selectItem: function(item, index) {
+        selectItem(item, index) {
             if (this.tool == 'svg-vue-r-select') {
                 /* Unselect the previous object */
                 this.deselectItem();
@@ -194,7 +194,7 @@ export default {
         },
 
         /* Make sure that all items are un-selected */
-        deselectItem: function() {
+        deselectItem() {
             // NOTE at the moment, the selectd item is always the
             // last one. Howerver, in the future there might be more
             // than one selected item (for grouping) so let's take the
@@ -203,7 +203,7 @@ export default {
         },
 
         /* Change the tool that is currently active */
-        setTool: function(tool) {
+        setTool(tool) {
             // In case an item is selected, un-select it to avoid key binding
             // conflicts.
             this.deselectItem();
@@ -213,7 +213,7 @@ export default {
 
         // Set either the color of the currently selected item, or the default
         // color for the next items to be created.
-        setColor: function(color) {
+        setColor(color) {
             this.bgcolor = color;
 
             this.items.forEach((item) => { if (item.selected) item.bgcolor = color; });
@@ -221,7 +221,7 @@ export default {
 
         // If an item is selected and either `delete` or `backspace` is pressed,
         // this function will delete it.
-        removeSelected: function() {
+        removeSelected() {
             // NOTE at the moment only one item is selected, and it's the
             // last one. In the future, go over all selected items and remove
             // each one of them.
@@ -231,12 +231,10 @@ export default {
             }
         },
 
-        capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1),
-
         // This is called when the user is done dragging an element. It will move
         // the item by the deltas passed as parameters. The index is also pased
         // as the user must be able to drag objects that they didn't select.
-        moveItem: function(index, diffX, diffY) {
+        moveItem(index, diffX, diffY) {
             if (index >= 0) {
                 this.items[index].x += diffX;
                 this.items[index].y += diffY;

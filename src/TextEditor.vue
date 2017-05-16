@@ -2,7 +2,7 @@
     <div>
         Input text:
         <input v-model="value.text" />
-        <input v-model.number="value.size" type="number" min="1" />
+        <input v-model.number="value.size" type="number" min="1" class="font-size" />
         <button @click="save">Save</button>
         <button @click="cancel">Cancel</button>
     </div>
@@ -31,4 +31,7 @@ export default {
 </script>
 
 <style>
+.font-size {
+    width: 3em;
+}
 </style>
