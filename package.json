@@ -6,7 +6,7 @@
   "description": "A lightweight SVG graph editor built with Vue.js",
   "scripts": {
     "test": "cross-env BABEL_ENV=test karma start karma.conf.js --single-run",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "repository": {
