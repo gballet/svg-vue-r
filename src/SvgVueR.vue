@@ -63,6 +63,8 @@ import SvgVueRCircle from './SvgVueRCircle.vue';
 import SvgVueRLine from './SvgVueRLine.vue';
 import SvgVueRText from './SvgVueRText.vue';
 
+import 'font-awesome/css/font-awesome.css';
+
 export default {
     name: "svg-vue-r",
     data() {
