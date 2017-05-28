@@ -20,14 +20,12 @@ export default {
     props: ["item"],
     computed: {
         stroke: function() {
-            console.log(this.item)
             if (this.item.selected)
                 return 'black';
             else
                 return this.item.fgcolor || 'black';
         },
         strokewidth: function() {
-            console.log(this.item.selected)
             if (this.item.selected)
                 return '3px';
             else
