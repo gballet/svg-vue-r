@@ -1,8 +1,10 @@
 <template>
     <span class="color-picker">
-        <span class="fa fa-square"
-            :style="'color: ' + value + ';'"
+        <span :class="['fa', value == 'none' ? 'fa-ban' : 'fa-square']"
+            :style="value == 'none' ? '' : 'color: ' + value + ';'"
             @click="showList = !showList">
+        </span>
+        <span v-if="showList" class="fa fa-ban" @click="selectColor('none')">
         </span>
         <span v-for="(color, index) in ['blue', 'red', 'green', 'yellow', 'black', 'white']"
             :key="index" class="fa fa-square" :style="'color: ' + color + ';'"
