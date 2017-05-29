@@ -4,7 +4,7 @@
             :style="value == 'none' ? '' : 'color: ' + value + ';'"
             @click="showList = !showList">
         </span>
-        <span v-if="showList" class="fa fa-ban" @click="selectColor('none')">
+        <span v-if="showList && hasNoneColor" class="fa fa-ban" @click="selectColor('none')">
         </span>
         <span v-for="(color, index) in ['blue', 'red', 'green', 'yellow', 'black', 'white']"
             :key="index" class="fa fa-square" :style="'color: ' + color + ';'"
@@ -20,7 +20,13 @@ export default {
             showList: false
         }
     },
-    props: ["value"],
+    props: {
+        value: Object,
+        hasNoneColor: {
+            type: Boolean,
+            default: false
+        }
+    },
     methods: {
         selectColor(color) {
             this.showList = false;

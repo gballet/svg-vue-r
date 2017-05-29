@@ -42,7 +42,8 @@
             <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'active-tool' : 'inactive-tool'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
             </button>
-            <color-picker v-model="bgcolor"></color-picker>
+            <color-picker v-model="fgcolor"></color-picker>
+            <color-picker v-model="bgcolor" has-none-color="true"></color-picker>
         </div>
     </div>
 </template>
@@ -80,6 +81,7 @@ export default {
             dheight: 0,
             dr: 0,
             resizing: false,
+            fgcolor: "black",
             bgcolor: "blue",
             tools: systemTools,
             editingItem: -1
@@ -92,6 +94,12 @@ export default {
             if (this.items.length > 0 && this.items[this.items.length-1].selected) {
                 this.items[this.items.length-1].bgcolor = this.bgcolor;
             }
+        },
+
+        fgcolor() {
+          if (this.items.length > 0 && this.items[this.items.length-1].selected) {
+              this.items[this.items.length-1].fgcolor = this.fgcolor;
+          }
         }
     },
     methods: {
@@ -115,6 +123,7 @@ export default {
                  let new_item = {
                     type: this.tool,
                     bgcolor: this.bgcolor,
+                    fgcolor: this.fgcolor,
                     selected: false
                 };
 
@@ -215,6 +224,7 @@ export default {
 
         // Set either the color of the currently selected item, or the default
         // color for the next items to be created.
+        // TODO remove after updating unit tests
         setColor(color) {
             this.bgcolor = color;
 
