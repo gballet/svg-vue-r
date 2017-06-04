@@ -21,7 +21,7 @@ export default {
         }
     },
     props: {
-        value: Object,
+        value: String,
         hasNoneColor: {
             type: Boolean,
             default: false

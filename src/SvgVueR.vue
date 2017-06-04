@@ -43,7 +43,7 @@
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
             </button>
             <color-picker v-model="fgcolor"></color-picker>
-            <color-picker v-model="bgcolor" has-none-color="true"></color-picker>
+            <color-picker v-model="bgcolor" :has-none-color="true"></color-picker>
         </div>
     </div>
 </template>
