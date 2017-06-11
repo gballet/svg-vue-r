@@ -38,7 +38,7 @@
                 @mouseup.stop="resizeEnd" @mouseleave="resizeEnd">
             </rect>
         </svg>
-        <div>
+        <div class="tool-bar">
             <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'active-tool' : 'inactive-tool'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
             </button>
