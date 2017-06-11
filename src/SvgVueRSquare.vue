@@ -7,7 +7,8 @@
             @mouseup.stop="moveEnd" @mouseleave.stop="moveEnd">
         </rect>
         <rect v-if="item.selected"
-            :x="item.x+item.width-5+rszW" :y="item.y+item.height-5+rszH"
+            :x="item.x+item.width-5+rszW+currentDragX"
+            :y="item.y+item.height-5+rszH+currentDragY"
             width="10" height="10" stroke="black" fill="cyan"
             @mousemove="resize" @mouseleave.stop="resizeEnd"
             @mousedown.stop="resizeStart" @mouseup.stop="resizeEnd">
