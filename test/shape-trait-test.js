@@ -13,6 +13,25 @@ const fakeEndX = 789;
 const fakeEndY = 369;
 
 describe("shape trait", () => {
+    beforeEach(() => {
+        this.fakeInstance = {
+            ...draggableShapeData,
+            ...draggableShapeMethods,
+            ...selectableShapeComputedProps,
+            $emit(signal, ...args) {
+                this.emitted = signal;
+                this.emitArgs = args;
+            },
+            item: {
+                fgcolor: 'blue'
+            }
+        }
+    });
+
+    afterEach(() => {
+        delete this.fakeInstance;
+    });
+
     it("should provide the proper initial state for drag & drop", () => {
         expect(draggableShapeData.dragging).toBe(false);
         expect(draggableShapeData.initDragX).toBe(null);
@@ -22,109 +41,74 @@ describe("shape trait", () => {
     });
 
     it("should save the initial coordinates at the start", () => {
-        let fakeInstance = {
-            ...draggableShapeData,
-            ...draggableShapeMethods
-        };
-
-        expect(fakeInstance.initDragX).toBe(null);
+        expect(this.fakeInstance.initDragX).toBe(null);
 
         /* Simulate a click event */
-        fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
+        this.fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
 
-        expect(fakeInstance.initDragX).toNotBe(null);
-        expect(fakeInstance.initDragX).toBe(fakeStartX);
-        expect(fakeInstance.currentDragX).toBe(0);
+        expect(this.fakeInstance.initDragX).toNotBe(null);
+        expect(this.fakeInstance.initDragX).toBe(fakeStartX);
+        expect(this.fakeInstance.currentDragX).toBe(0);
     });
 
     it("should update state when moving", () => {
-        let fakeInstance = {
-            ...draggableShapeData,
-            ...draggableShapeMethods
-        };
-
-        expect(fakeInstance.initDragX).toBe(null);
-        expect(fakeInstance.currentDragX).toBe(0);
-        expect(fakeInstance.dragging).toBe(false);
+        expect(this.fakeInstance.initDragX).toBe(null);
+        expect(this.fakeInstance.currentDragX).toBe(0);
+        expect(this.fakeInstance.dragging).toBe(false);
 
         /* Simulate a click event */
-        fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
+        this.fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
 
         /* Simulate a move event */
-        fakeInstance.move({offsetX: fakeTempX, offsetY: fakeTempY});
+        this.fakeInstance.move({offsetX: fakeTempX, offsetY: fakeTempY});
 
-        expect(fakeInstance.initDragX).toBe(fakeStartX);
-        expect(fakeInstance.currentDragX).toBe(fakeTempX-fakeStartX);
-        expect(fakeInstance.dragging).toBe(true);
+        expect(this.fakeInstance.initDragX).toBe(fakeStartX);
+        expect(this.fakeInstance.currentDragX).toBe(fakeTempX-fakeStartX);
+        expect(this.fakeInstance.dragging).toBe(true);
     });
 
     it("should end up in the correct state", () => {
-        let fakeInstance = {
-            ...draggableShapeData,
-            ...draggableShapeMethods,
-            $emit(signal, ...args) {
-                this.emitted = signal;
-                this.emitArgs = args;
-            }
-        };
-
-        expect(fakeInstance.initDragX).toBe(null);
-        expect(fakeInstance.currentDragX).toBe(0);
+        expect(this.fakeInstance.initDragX).toBe(null);
+        expect(this.fakeInstance.currentDragX).toBe(0);
 
         /* Simulate a click event */
-        fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
+        this.fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
 
         /* Simulate a move event */
-        fakeInstance.move({offsetX: fakeTempX, offsetY: fakeTempY});
+        this.fakeInstance.move({offsetX: fakeTempX, offsetY: fakeTempY});
 
         /* Simulate mouse up */
-        fakeInstance.moveEnd({offsetX: fakeEndX, offsetY: fakeEndY});
+        this.fakeInstance.moveEnd({offsetX: fakeEndX, offsetY: fakeEndY});
 
-        expect(fakeInstance.initDragX).toBe(null);
-        expect(fakeInstance.initDragY).toBe(null);
-        expect(fakeInstance.dragging).toBe(false);
-        expect(fakeInstance.emitted).toEqual('item');
-        expect(fakeInstance.emitArgs).toBeA(Array);
-        expect(fakeInstance.emitArgs.length).toEqual(2);
+        expect(this.fakeInstance.initDragX).toBe(null);
+        expect(this.fakeInstance.initDragY).toBe(null);
+        expect(this.fakeInstance.dragging).toBe(false);
+        expect(this.fakeInstance.emitted).toEqual('item');
+        expect(this.fakeInstance.emitArgs).toBeA(Array);
+        expect(this.fakeInstance.emitArgs.length).toEqual(2);
     });
 
     it("should emit a select event if the mouse hasn't moved", () => {
-        let fakeInstance = {
-            ...draggableShapeData,
-            ...draggableShapeMethods,
-            $emit(signal, ...args) {
-                this.emitted = signal;
-                this.emitArgs = args;
-            }
-        };
-
-        expect(fakeInstance.initDragX).toBe(null);
-        expect(fakeInstance.currentDragX).toBe(0);
+        expect(this.fakeInstance.initDragX).toBe(null);
+        expect(this.fakeInstance.currentDragX).toBe(0);
 
         /* Simulate a click event */
-        fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
+        this.fakeInstance.moveStart({offsetX: fakeStartX, offsetY: fakeStartY});
 
         /* Simulate mouse up */
-        fakeInstance.moveEnd({offsetX: fakeStartX+2, offsetY: fakeStartY+1});
+        this.fakeInstance.moveEnd({offsetX: fakeStartX+2, offsetY: fakeStartY+1});
 
-        expect(fakeInstance.dragging).toBe(false);
-        expect(fakeInstance.emitted).toEqual('select');
+        expect(this.fakeInstance.dragging).toBe(false);
+        expect(this.fakeInstance.emitted).toEqual('select');
     });
 
     it("should thicken the stroke when the shape is selected", () => {
-        let fakeInstance = {
-            ...selectableShapeComputedProps,
-            item: {
-                fgcolor: 'blue'
-            }
-        };
+        expect(this.fakeInstance.stroke()).toBe('blue');
+        expect(this.fakeInstance.strokewidth()).toBe('1px');
 
-        expect(fakeInstance.stroke()).toBe('blue');
-        expect(fakeInstance.strokewidth()).toBe('1px');
+        this.fakeInstance.item.selected = true;
 
-        fakeInstance.item.selected = true;
-
-        expect(fakeInstance.stroke()).toBe('black');
-        expect(fakeInstance.strokewidth()).toBe('3px');
+        expect(this.fakeInstance.stroke()).toBe('black');
+        expect(this.fakeInstance.strokewidth()).toBe('3px');
     });
 });
