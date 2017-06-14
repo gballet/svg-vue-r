@@ -1,9 +1,19 @@
+/* Initial values of drag-related variables */
 export const draggableShapeData = {
     dragging: false,
     initDragX: null,    // drag start point, set with mousedown
     initDragY: null,
     currentDragX: 0,    // current drag offsets, updated with mousemove
     currentDragY: 0
+};
+
+/* Initial values of resize-related variables */
+export const resizeableShapeData = {
+    rszX: 0,
+    rszY: 0,
+    rszW: 0,
+    rszH: 0,
+    resizing: false
 };
 
 export const draggableShapeMethods = {
@@ -57,5 +67,30 @@ export const selectableShapeComputedProps = {
             return '3px';
         else
             return '1px';
+    }
+};
+
+/* Methods that need to be implemented to support the resize trait */
+export const resizeableShapeMethods = {
+    resizeStart(e) {
+        this.rszX = e.offsetX;
+        this.rszY = e.offsetY;
+        this.resizing = true;
+    },
+
+    resizeEnd(e) {
+        if (this.resizing) {
+            this.item.width = Math.max(this.item.width + e.offsetX - this.rszX, 0);
+            this.item.height = Math.max(this.item.height + e.offsetY - this.rszY, 0);
+            this.rszW = this.rszY = this.rszW = this.rszH = 0;
+            this.resizing = false;
+        }
+    },
+
+    resize(e) {
+        if (this.resizing) {
+            this.rszW = Math.max(e.offsetX - this.rszX, -this.item.width);
+            this.rszH = Math.max(e.offsetY - this.rszY, -this.item.height);
+        }
     }
 };
