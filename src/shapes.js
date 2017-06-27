@@ -73,9 +73,11 @@ export const selectableShapeComputedProps = {
 /* Methods that need to be implemented to support the resize trait */
 export const resizeableShapeMethods = {
     resizeStart(e) {
-        this.rszX = e.offsetX;
-        this.rszY = e.offsetY;
-        this.resizing = true;
+        if (e.button == 0) {
+            this.rszX = e.offsetX;
+            this.rszY = e.offsetY;
+            this.resizing = true;
+        }
     },
 
     resizeEnd(e) {
