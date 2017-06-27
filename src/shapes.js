@@ -80,8 +80,7 @@ export const resizeableShapeMethods = {
 
     resizeEnd(e) {
         if (this.resizing) {
-            this.item.width = Math.max(this.item.width + e.offsetX - this.rszX, 0);
-            this.item.height = Math.max(this.item.height + e.offsetY - this.rszY, 0);
+            this.$emit('resize-end', e.offsetX - this.rszX, e.offsetY - this.rszY);
             this.rszW = this.rszY = this.rszW = this.rszH = 0;
             this.resizing = false;
         }
@@ -89,8 +88,7 @@ export const resizeableShapeMethods = {
 
     resize(e) {
         if (this.resizing) {
-            this.rszW = Math.max(e.offsetX - this.rszX, -this.item.width);
-            this.rszH = Math.max(e.offsetY - this.rszY, -this.item.height);
+            this.$emit('resize-move', e.offsetX - this.rszX, e.offsetY - this.rszY);
         }
     }
 };
