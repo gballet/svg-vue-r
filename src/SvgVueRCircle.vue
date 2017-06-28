@@ -63,7 +63,7 @@ export default {
             /* Evaluated formula, see radius() */
             this.item.r = Math.sqrt(Math.pow(diffY, 2)
                 + Math.pow(this.item.r + diffX, 2));
-            this.rszW = this.rszY = this.rszW = this.rszH = 0;
+            this.rszW = this.rszH = 0;
         }
     }
 }
