@@ -6,13 +6,11 @@
             @mousedown.stop="moveStart" @mousemove="move"
             @mouseup.stop="moveEnd" @mouseleave.stop="moveEnd">
         </rect>
-        <rect v-if="item.selected"
+        <resize-handle v-if="item.selected"
             :x="item.x+item.width-5+rszW+currentDragX"
             :y="item.y+item.height-5+rszH+currentDragY"
-            width="10" height="10" stroke="black" fill="cyan"
-            @mousemove="resize" @mouseleave.stop="resizeEnd"
-            @mousedown.stop="resizeStart" @mouseup.stop="resizeEnd">
-        </rect>
+            @resize-move="resize" @resize-end="resizeEnd">
+        </resize-handle>
     </g>
 </template>
 
@@ -24,6 +22,7 @@ import {
     resizeableShapeData,
     resizeableShapeMethods
 } from './shapes.js';
+import ResizeHandle from './ResizeHandle.vue';
 
 export default {
     data: () => {
@@ -35,12 +34,29 @@ export default {
     },
     props: ["item"],            // can't use v-model because it's called from a
                                 // v-for loop.
+    components: {
+        ResizeHandle,
+    },
     computed: {
         ...selectableShapeComputedProps
     },
     methods: {
         ...draggableShapeMethods,
-        ...resizeableShapeMethods
+
+        resizeEnd(diffX, diffY) {
+            this.item.width = Math.max(this.item.width + diffX, 0);
+            this.item.height = Math.max(this.item.height + diffY, 0);
+            this.rszW = this.rszY = this.rszW = this.rszH = 0;
+        },
+
+        resize(diffX, diffY) {
+            this.rszW = Math.max(diffX, -this.item.width);
+            this.rszH = Math.max(diffY, -this.item.height);
+        },
+
+        nextRotationCenter() {
+            this.rcIndex = this.rcIndex % 9;
+        },
     }
 }
 </script>
