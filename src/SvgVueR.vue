@@ -44,6 +44,7 @@
             </button>
             <color-picker v-model="fgcolor"></color-picker>
             <color-picker v-model="bgcolor" :has-none-color="true"></color-picker>
+            <input type="number" v-model.number="items[items.length-1].rotation" v-if="items.length > 0 && items[items.length-1].selected" />
         </div>
     </div>
 </template>
