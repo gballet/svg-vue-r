@@ -74,6 +74,7 @@ export const selectableShapeComputedProps = {
 export const resizeableShapeMethods = {
     resizeStart(e) {
         if (e.button == 0) {
+            this.$emit('resize-start');
             this.rszX = e.offsetX;
             this.rszY = e.offsetY;
             this.resizing = true;
