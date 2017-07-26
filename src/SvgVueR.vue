@@ -43,7 +43,13 @@
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
             </button>
             <label class="tool bgcolor">
-                <input type="color" v-model="bgcolor" @input="setColor">
+                <input type="color" v-model="bgcolor" @input="setBgColor">
+            </label>
+            <label class="tool fgcolor">
+                <input type="color" v-model="fgcolor" @input="setFgColor">
+            </label>
+            <label class="tool">
+                <input type="number" v-model.number="items[items.length-1].rotation" v-if="items.length > 0 && items[items.length-1].selected" />
             </label>
         </div>
     </div>
@@ -82,6 +88,7 @@ export default {
             dr: 0,
             resizing: false,
             bgcolor: "#0000ff",
+            fgcolor: "#000000",
             tools: systemTools,
             editingItem: -1
         }
@@ -107,6 +114,7 @@ export default {
                  let new_item = {
                     type: this.tool,
                     bgcolor: this.bgcolor,
+                    fgcolor: this.fgcolor,
                     selected: false
                 };
 
@@ -210,9 +218,13 @@ export default {
 
         // Set either the color of the currently selected item, or the default
         // color for the next items to be created.
-        setColor(e) {
+        setBgColor(e) {
            this.bgcolor = e.target.value;
            this.items.forEach((item) => { if (item.selected) item.bgcolor = e.target.value; });
+        },
+         setFgColor(e) {
+           this.fgcolor = e.target.value;
+           this.items.forEach((item) => { if (item.selected) item.fgcolor = e.target.value; });
         },
 
         // If an item is selected and either `delete` or `backspace` is pressed,
@@ -284,7 +296,7 @@ export default {
         opacity:1;
         background-color:#aaa;
     }
-    .tool.bgcolor > input {
+    .tool.bgcolor > input, .tool.fgcolor > input  {
         width:24px;
         height:100%;
         padding:0;

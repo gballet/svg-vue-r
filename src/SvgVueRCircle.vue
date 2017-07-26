@@ -1,70 +1,69 @@
 <template>
-    <circle :cx="item.x+currentDragX" :cy="item.y+currentDragY" :r="item.r"
-        :fill="item.bgcolor" :stroke="stroke" :stroke-width="strokewidth"
-        @mousedown.stop="moveStart" @mousemove="move"
-        @mouseup.stop="moveEnd" @mouseleave.stop="moveEnd">
-    </circle>
+    <g>
+        <circle :cx="item.x+currentDragX" :cy="item.y+currentDragY" :r="radius"
+            :fill="item.bgcolor" :stroke="stroke" :stroke-width="strokewidth"
+            @mousedown.stop="moveStart" @mousemove="move"
+            @mouseup.stop="moveEnd" @mouseleave.stop="moveEnd">
+        </circle>
+        <resize-handle v-if="item.selected"
+            :x="item.x+item.r-5+rszW+currentDragX"
+            :y="item.y-5+rszH+currentDragY"
+            @resize-move="resize" @resize-end="resizeEnd">
+        </resize-handle>
+    </g>
 </template>
 
 <script>
+import {
+    draggableShapeData,
+    selectableShapeComputedProps,
+    draggableShapeMethods,
+    resizeableShapeData,
+    resizeableShapeMethods
+} from './shapes.js';
+import ResizeHandle from './ResizeHandle.vue';
+
 export default {
     data: () => {
         return {
-            dragging: false,
-            initDragX: null,    // drag start point, set with mousedown
-            initDragY: null,
-            currentDragX: 0,    // current drag offsets, updated with mousemove
-            currentDragY: 0
-        }
+            ...draggableShapeData,
+            ...resizeableShapeData
+        };
     },
     props: ["item"],
+    components: {ResizeHandle},
     computed: {
-        stroke: function() {
-            if (this.item.selected)
-                return 'black';
-            else
-                return this.item.fgcolor || 'black';
-        },
-        strokewidth: function() {
-            if (this.item.selected)
-                return '3px';
-            else
-                return '1px';
+        ...selectableShapeComputedProps,
+        radius() {
+            // If the circle is being resized, use a calculated radius based
+            // on the mouse move. Otherwise, use the registered radius.
+            if (this.rszW != 0 || this.rszH != 0) {
+                const initX = this.item.x+this.item.r;
+                const initY = this.item.y;
+
+                return Math.sqrt(
+                    Math.pow(initY + this.rszH - this.item.y, 2)
+                    + Math.pow(initX + this.rszW - this.item.x, 2));
+            } else {
+                return this.item.r;
+            }
         }
     },
     methods: {
-        move: function(e) {
-            if (this.initDragX) {
-                if (Math.abs(e.offsetX-this.initDragX) + Math.abs(e.offsetY-this.initDragY) > 5)
-                    // Quick opt: make sure that it's not already dragging
-                    this.dragging = true;
+        ...draggableShapeMethods,
 
-                if (this.dragging) {
-                    this.currentDragX = e.offsetX - this.initDragX;
-                    this.currentDragY = e.offsetY - this.initDragY;
-                }
-            }
+        /* Override for square */
+        resize(diffX, diffY) {
+            this.rszW = diffX;
+            this.rszH = diffY;
         },
-        moveStart: function(e) {
-            this.initDragX = e.offsetX;
-            this.initDragY = e.offsetY;
-        },
-        moveEnd: function(e) {
-            if (this.initDragX) {
-                if (!this.dragging)
-                    this.$emit("select");
-                else {
-                    this.dragging = false;
-                    this.currentDragX = 0;
-                    this.currentDragY = 0;
-                    let diffX = e.offsetX - this.initDragX;
-                    let diffY = e.offsetY - this.initDragY;
-                    this.$emit('item', diffX, diffY);
-                }
 
-                this.initDragX = null;
-                this.initDragY = null;
-            }
+        /* Override */
+        resizeEnd(diffX, diffY) {
+            /* Evaluated formula, see radius() */
+            this.item.r = Math.sqrt(Math.pow(diffY, 2)
+                + Math.pow(this.item.r + diffX, 2));
+            this.rszW = this.rszH = 0;
         }
     }
 }
