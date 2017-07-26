@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="svg-wrap">
         <text-editor v-if="editingItem >= 0"
             @hide="editingItem=-1"
             v-model="items[editingItem]">
@@ -38,11 +38,13 @@
                 @mouseup.stop="resizeEnd" @mouseleave="resizeEnd">
             </rect>
         </svg>
-        <div>
-            <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'active-tool' : 'inactive-tool'">
+        <div class="toolbar">
+            <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'tool active' : 'tool inactive'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
             </button>
-            <color-picker v-model="bgcolor"></color-picker>
+            <label class="tool bgcolor">
+                <input type="color" v-model="bgcolor" @input="setColor">
+            </label>
         </div>
     </div>
 </template>
@@ -57,7 +59,6 @@ const systemTools = [
 ];
 
 import TextEditor from './TextEditor.vue';
-import ColorPicker from './ColorPicker.vue';
 import SvgVueRSquare from './SvgVueRSquare.vue';
 import SvgVueRCircle from './SvgVueRCircle.vue';
 import SvgVueRLine from './SvgVueRLine.vue';
@@ -80,18 +81,9 @@ export default {
             dheight: 0,
             dr: 0,
             resizing: false,
-            bgcolor: "blue",
+            bgcolor: "#0000ff",
             tools: systemTools,
             editingItem: -1
-        }
-    },
-    watch: {
-        // Watch the background color so that if a shape is selected while
-        // picking a different color, its color will be changed.
-        bgcolor() {
-            if (this.items.length > 0 && this.items[this.items.length-1].selected) {
-                this.items[this.items.length-1].bgcolor = this.bgcolor;
-            }
         }
     },
     methods: {
@@ -187,6 +179,9 @@ export default {
                 /* Set halo */
                 item.selected = true;
 
+                /* Update bgcolor in toolbar to reflect current object color */
+                this.bgcolor = item.bgcolor;
+
                 /* If text, set editing mode */
                 if (item.type == "svg-vue-r-text")
                     this.editingItem = this.items.length-1;
@@ -215,10 +210,9 @@ export default {
 
         // Set either the color of the currently selected item, or the default
         // color for the next items to be created.
-        setColor(color) {
-            this.bgcolor = color;
-
-            this.items.forEach((item) => { if (item.selected) item.bgcolor = color; });
+        setColor(e) {
+           this.bgcolor = e.target.value;
+           this.items.forEach((item) => { if (item.selected) item.bgcolor = e.target.value; });
         },
 
         // If an item is selected and either `delete` or `backspace` is pressed,
@@ -245,7 +239,6 @@ export default {
     },
     components: {
         "text-editor": TextEditor,
-        'color-picker': ColorPicker,
         "svg-vue-r-square": SvgVueRSquare,
         "svg-vue-r-circle": SvgVueRCircle,
         "svg-vue-r-line": SvgVueRLine,
@@ -255,32 +248,46 @@ export default {
 </script>
 
 <style>
-    .colorbutton {
-        width: 10px;
-        height: 10px;
-        border: solid 1px black;
-    }
-
-    .active-tool {
-        background-color: #aaa;
-        border: none;
-        padding: 5px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
-
-    .inactive-tool {
-        border: none;
-        padding: 5px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
-
     .current-color {
         border: solid 3px black;
+    }
+    .svg-wrap{
+        position:relative;
+        display:inline-block;
+    }
+    .toolbar {
+        position:relative;
+        overflow:hidden;
+        height:32px;
+        display:-webkit-flex;
+        display:flex;
+        -webkit-flex-flow:row nowrap;
+        flex-flow:row nowrap;
+    }
+    .tool {
+        -webkit-flex:1 0 auto;
+        flex:1 0 auto;
+        font-size:16px;
+        box-sizing:border-box;
+        border:1px solid #ccc;
+        background-color:#ddd;
+        opacity:1;
+        text-align:center;
+        padding:2px;
+        margin:0;
+    }
+    .tool:hover{
+        cursor:pointer;
+        opacity:.9;
+    }
+    .tool.active {
+        opacity:1;
+        background-color:#aaa;
+    }
+    .tool.bgcolor > input {
+        width:24px;
+        height:100%;
+        padding:0;
+        border:none;
     }
 </style>
