@@ -48,8 +48,8 @@
             <label class="tool fgcolor">
                 <input type="color" v-model="fgcolor" @input="setFgColor">
             </label>
-            <label class="tool">
-                <input type="number" v-model.number="items[items.length-1].rotation" v-if="items.length > 0 && items[items.length-1].selected" />
+            <label class="tool rotation" v-if="items.length > 0 && items[items.length-1].selected">
+                <input type="number" v-model.number="items[items.length-1].rotation" />
             </label>
         </div>
     </div>
@@ -296,10 +296,19 @@ export default {
         opacity:1;
         background-color:#aaa;
     }
+    .tool > input {
+        border: none;
+        box-sizing: border-box;
+    }
     .tool.bgcolor > input, .tool.fgcolor > input  {
         width:24px;
         height:100%;
         padding:0;
-        border:none;
+    }
+    .tool.rotation > input {
+        padding: 0 4px;
+        width: 48px;
+        height: 20px;
+        margin: 3px auto;
     }
 </style>
