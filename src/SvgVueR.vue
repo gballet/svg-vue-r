@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="svg-wrap">
         <text-editor v-if="editingItem >= 0"
             @hide="editingItem=-1"
             v-model="items[editingItem]">
@@ -38,13 +38,19 @@
                 @mouseup.stop="resizeEnd" @mouseleave="resizeEnd">
             </rect>
         </svg>
-        <div class="tool-bar">
-            <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'active-tool' : 'inactive-tool'">
+        <div class="toolbar">
+            <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'tool active' : 'tool inactive'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
             </button>
-            <color-picker v-model="fgcolor"></color-picker>
-            <color-picker v-model="bgcolor" :has-none-color="true"></color-picker>
-            <input type="number" v-model.number="items[items.length-1].rotation" v-if="items.length > 0 && items[items.length-1].selected" />
+            <label class="tool bgcolor">
+                <input type="color" v-model="bgcolor" @input="setBgColor">
+            </label>
+            <label class="tool fgcolor">
+                <input type="color" v-model="fgcolor" @input="setFgColor">
+            </label>
+            <label class="tool rotation" v-if="items.length > 0 && items[items.length-1].selected">
+                <input type="number" v-model.number="items[items.length-1].rotation" />
+            </label>
         </div>
     </div>
 </template>
@@ -59,7 +65,6 @@ const systemTools = [
 ];
 
 import TextEditor from './TextEditor.vue';
-import ColorPicker from './ColorPicker.vue';
 import SvgVueRSquare from './SvgVueRSquare.vue';
 import SvgVueRCircle from './SvgVueRCircle.vue';
 import SvgVueRLine from './SvgVueRLine.vue';
@@ -82,25 +87,10 @@ export default {
             dheight: 0,
             dr: 0,
             resizing: false,
-            fgcolor: "black",
-            bgcolor: "blue",
+            bgcolor: "#0000ff",
+            fgcolor: "#000000",
             tools: systemTools,
             editingItem: -1
-        }
-    },
-    watch: {
-        // Watch the background color so that if a shape is selected while
-        // picking a different color, its color will be changed.
-        bgcolor() {
-            if (this.items.length > 0 && this.items[this.items.length-1].selected) {
-                this.items[this.items.length-1].bgcolor = this.bgcolor;
-            }
-        },
-
-        fgcolor() {
-          if (this.items.length > 0 && this.items[this.items.length-1].selected) {
-              this.items[this.items.length-1].fgcolor = this.fgcolor;
-          }
         }
     },
     methods: {
@@ -197,6 +187,9 @@ export default {
                 /* Set halo */
                 item.selected = true;
 
+                /* Update bgcolor in toolbar to reflect current object color */
+                this.bgcolor = item.bgcolor;
+
                 /* If text, set editing mode */
                 if (item.type == "svg-vue-r-text")
                     this.editingItem = this.items.length-1;
@@ -225,11 +218,13 @@ export default {
 
         // Set either the color of the currently selected item, or the default
         // color for the next items to be created.
-        // TODO remove after updating unit tests
-        setColor(color) {
-            this.bgcolor = color;
-
-            this.items.forEach((item) => { if (item.selected) item.bgcolor = color; });
+        setBgColor(e) {
+           this.bgcolor = e.target.value;
+           this.items.forEach((item) => { if (item.selected) item.bgcolor = e.target.value; });
+        },
+         setFgColor(e) {
+           this.fgcolor = e.target.value;
+           this.items.forEach((item) => { if (item.selected) item.fgcolor = e.target.value; });
         },
 
         // If an item is selected and either `delete` or `backspace` is pressed,
@@ -256,7 +251,6 @@ export default {
     },
     components: {
         "text-editor": TextEditor,
-        'color-picker': ColorPicker,
         "svg-vue-r-square": SvgVueRSquare,
         "svg-vue-r-circle": SvgVueRCircle,
         "svg-vue-r-line": SvgVueRLine,
@@ -266,32 +260,55 @@ export default {
 </script>
 
 <style>
-    .colorbutton {
-        width: 10px;
-        height: 10px;
-        border: solid 1px black;
-    }
-
-    .active-tool {
-        background-color: #aaa;
-        border: none;
-        padding: 5px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
-
-    .inactive-tool {
-        border: none;
-        padding: 5px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
-
     .current-color {
         border: solid 3px black;
+    }
+    .svg-wrap{
+        position:relative;
+        display:inline-block;
+    }
+    .toolbar {
+        position:relative;
+        overflow:hidden;
+        height:32px;
+        display:-webkit-flex;
+        display:flex;
+        -webkit-flex-flow:row nowrap;
+        flex-flow:row nowrap;
+    }
+    .tool {
+        -webkit-flex:1 0 auto;
+        flex:1 0 auto;
+        font-size:16px;
+        box-sizing:border-box;
+        border:1px solid #ccc;
+        background-color:#ddd;
+        opacity:1;
+        text-align:center;
+        padding:2px;
+        margin:0;
+    }
+    .tool:hover{
+        cursor:pointer;
+        opacity:.9;
+    }
+    .tool.active {
+        opacity:1;
+        background-color:#aaa;
+    }
+    .tool > input {
+        border: none;
+        box-sizing: border-box;
+    }
+    .tool.bgcolor > input, .tool.fgcolor > input  {
+        width:24px;
+        height:100%;
+        padding:0;
+    }
+    .tool.rotation > input {
+        padding: 0 4px;
+        width: 48px;
+        height: 20px;
+        margin: 3px auto;
     }
 </style>
