@@ -34,10 +34,14 @@
 
             <!-- resizing indicator -->
             <rect :x="width-10" :y="height-10" width="10" height="10"
-                @mousedown.stop="resizeStart" @mousemove.stop="resize"
-                @mouseup.stop="resizeEnd" @mouseleave="resizeEnd">
+                @mousedown.stop="resizeStart">
             </rect>
         </svg>
+        <div v-if="resizing" class="resizer" :style="{top:height + 'px', left:width + 'px'}"
+            @mousemove.stop="resize"
+            @mouseup.stop="resizeEnd"
+            @mouseleave="resizeEnd">
+        </div>
         <div class="toolbar">
             <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'tool active' : 'tool inactive'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
@@ -169,9 +173,11 @@ export default {
             this.resize_init_y = e.pageY;
             this.resize_init_width = this.width;
             this.resize_init_height = this.height;
+            console.log('START resizing');
         },
         resizeEnd(e) {
             this.resizing = false;
+            console.log('END resizing')
         },
 
         // When clicking on an item, make sure it appears as selected
@@ -266,6 +272,14 @@ export default {
     .svg-wrap{
         position:relative;
         display:inline-block;
+    }
+    .resizer{
+        position:absolute;
+        height:200px;
+        width:200px;
+        background:transparent;
+        -webkit-transform:translate3d(-50%,-50%,0);
+        transform:translate3d(-50%,-50%,0);
     }
     .toolbar {
         position:relative;
