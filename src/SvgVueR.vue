@@ -171,11 +171,9 @@ export default {
             this.resize_init_y = e.pageY;
             this.resize_init_width = this.width;
             this.resize_init_height = this.height;
-            console.log('START resizing');
         },
         resizeEnd(e) {
             this.resizing = false;
-            console.log('END resizing')
         },
 
         // When clicking on an item, make sure it appears as selected
