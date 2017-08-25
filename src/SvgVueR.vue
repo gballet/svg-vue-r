@@ -37,9 +37,7 @@
                 @mousedown.stop="resizeStart">
             </rect>
         </svg>
-        <div v-if="resizing" class="resizer" :style="{top:height + 'px', left:width + 'px'}"
-            @mousemove.stop="resize" @mouseleave.stop="resizeEnd" @mouseup.stop="resizeEnd" >
-        </div>
+        <div v-if="resizing" class="resizer" @mousemove.stop="resize" @mouseleave.stop="resizeEnd" @mouseup.stop="resizeEnd"></div>
         <div class="toolbar">
             <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'tool active' : 'tool inactive'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
@@ -274,9 +272,9 @@ export default {
         z-index:10;
         height:100vh;
         width:100vw;
+        top:0;
+        left:0;
         background:transparent;
-        -webkit-transform:translate3d(-50%,-50%,0);
-        transform:translate3d(-50%,-50%,0);
     }
     .toolbar {
         position:relative;
