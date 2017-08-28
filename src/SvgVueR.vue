@@ -34,10 +34,10 @@
 
             <!-- resizing indicator -->
             <rect :x="width-10" :y="height-10" width="10" height="10"
-                @mousedown.stop="resizeStart" @mousemove.stop="resize"
-                @mouseup.stop="resizeEnd" @mouseleave="resizeEnd">
+                @mousedown.stop="resizeStart">
             </rect>
         </svg>
+        <div v-if="resizing" class="resizer" @mousemove.stop="resize" @mouseleave.stop="resizeEnd" @mouseup.stop="resizeEnd"></div>
         <div class="toolbar">
             <button @click.prevent="setTool(_tool.name)" v-for="(_tool, index) in tools" :key="index" :class="tool == _tool.name ? 'tool active' : 'tool inactive'">
                 <span :class="['fa', `fa-${_tool.icon}`]"></span>
@@ -266,6 +266,15 @@ export default {
     .svg-wrap{
         position:relative;
         display:inline-block;
+    }
+    .resizer{
+        position:fixed;
+        z-index:10;
+        height:100vh;
+        width:100vw;
+        top:0;
+        left:0;
+        background:transparent;
     }
     .toolbar {
         position:relative;
