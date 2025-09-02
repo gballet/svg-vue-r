@@ -31,10 +31,10 @@ module.exports = function(config) {
     plugins: [
       require("karma-webpack"),
       require("karma-mocha"),
-      require("karma-phantomjs-launcher")
+      require("karma-chrome-launcher")
     ],
 
-    browsers: ["PhantomJS"],
+    browsers: ["ChromeHeadless"],
 
     browserConsoleLogOptions: {
       level: 'log',
